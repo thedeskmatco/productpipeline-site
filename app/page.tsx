@@ -101,9 +101,6 @@ export default function Home() {
 
         <section className="grid gap-12 lg:grid-cols-[1.15fr,0.85fr] items-start">
           <div className="flex flex-col items-center space-y-6 text-center">
-            <p className="text-sm uppercase tracking-[0.4em] text-white/50">
-              AI-powered ecommerce automation for modern merchants.
-            </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
               <span className="inline-flex" aria-hidden="true">
                 <LLMMark className="h-14 w-14 sm:h-16 sm:w-16 drop-shadow-[0_0_30px_rgba(83,216,255,0.55)]" />
@@ -121,6 +118,9 @@ export default function Home() {
                 <span className="align-super text-base font-light tracking-widest">™</span>
               </h1>
             </div>
+            <p className="text-sm uppercase tracking-[0.4em] text-white/50">
+              AI-powered ecommerce automation for modern merchants.
+            </p>
             <p className="text-lg text-white/80 max-w-2xl mx-auto">
               A next-generation infrastructure layer for managing product data and workflows.
             </p>
