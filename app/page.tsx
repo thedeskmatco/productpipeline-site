@@ -104,11 +104,11 @@ export default function Home() {
             <p className="text-sm uppercase tracking-[0.4em] text-white/50">
               AI-powered ecommerce automation for modern merchants.
             </p>
-            <div className="flex items-center justify-center gap-5">
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
               <span className="inline-flex" aria-hidden="true">
                 <LLMMark className="h-14 w-14 sm:h-16 sm:w-16 drop-shadow-[0_0_30px_rgba(83,216,255,0.55)]" />
               </span>
-              <h1 className="text-5xl sm:text-6xl font-semibold leading-tight text-center">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight text-center">
                 {headlineLetters.map((char, index) => (
                   <span
                     key={`${char}-${index}`}
