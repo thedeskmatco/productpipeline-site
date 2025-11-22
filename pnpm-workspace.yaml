@@ -1,0 +1,8 @@
+packages:
+  - .
+
+# Allow these dependencies to run their build/postinstall scripts in CI.
+onlyBuiltDependencies:
+  - "@vercel/speed-insights"
+  - sharp
+  - unrs-resolver
