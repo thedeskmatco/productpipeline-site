@@ -1,5 +1,3 @@
-import { useId } from "react";
-
 const positioning = [
   {
     label: "Positioning",
@@ -24,60 +22,217 @@ const status = [
 
 const headlineLetters = "ProductPipeline".split("");
 
-const llmNodes = [
-  { cx: 16, cy: 28, r: 6, delay: 0 },
-  { cx: 32, cy: 18, r: 5, delay: 0.2 },
-  { cx: 48, cy: 30, r: 4, delay: 0.35 },
-];
-
-const LLMMark = ({ className = "h-16 w-16" }: { className?: string }) => {
-  const id = useId();
-  const strokeId = `${id}-stroke`;
-  const nodeId = `${id}-node`;
-
-  return (
-    <svg className={`text-white ${className}`} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id={strokeId} x1="8" y1="10" x2="58" y2="50" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#53d8ff" />
-          <stop offset="1" stopColor="#7e7bff" />
-        </linearGradient>
-        <radialGradient id={nodeId} cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#ffffff" />
-          <stop offset="1" stopColor="#7e7bff" stopOpacity="0.3" />
-        </radialGradient>
-      </defs>
-      <path
-        d="M12 40C18 30 26 24 34 24C42 24 48 28 56 18"
-        stroke={`url(#${strokeId})`}
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="llm-connection"
-      />
-      <path
-        d="M12 32C20 20 36 18 44 14C48 12 52 10 56 12"
-        stroke={`url(#${strokeId})`}
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="llm-connection"
-        opacity={0.6}
-      />
-      {llmNodes.map((node, index) => (
-        <circle
-          key={`node-${index}`}
-          cx={node.cx}
-          cy={node.cy}
-          r={node.r}
-          fill={`url(#${nodeId})`}
-          className="llm-node"
-          style={{ animationDelay: `${node.delay}s` }}
-        />
-      ))}
-    </svg>
-  );
+type SpinnerProps = {
+  size?: number;
+  className?: string;
+  ariaLabel?: string;
 };
+
+// Brand spinner used across login/upload flows. Animations and hues inline for portability.
+function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: SpinnerProps) {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label={ariaLabel}
+      className={`inline-flex items-center justify-center ${className}`}
+    >
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 100 100"
+        xmlns="http://www.w3.org/2000/svg"
+        className="drop-shadow-[0_10px_30px_rgba(0,0,0,0.16)]"
+      >
+        <defs>
+          {/* Filter for glow effect on the core */}
+          <filter id="coreGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+            <feFlood floodColor="#a0e9ff" floodOpacity="0.9" result="color" />
+            <feComposite in="color" in2="blur" operator="in" result="glow" />
+            <feMerge>
+              <feMergeNode in="glow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          {/* Subtle radial backdrop */}
+          <radialGradient id="bgGlow" cx="50%" cy="50%" r="65%">
+            <stop offset="0%" stopColor="#4ea5ff" stopOpacity="0.12" />
+            <stop offset="60%" stopColor="#8a2be2" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#00091a" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
+        <style>
+          {`
+      :root {
+        --neon-blue: #8a2be2;
+        --neon-purple: #9370db;
+        --core-color: #a0e9ff;
+        --line-color: #8a2be2;
+        --flare-blue: #4ea5ff;
+        --node-stroke: #9370db;
+      }
+
+      /* Spinner Rotation: continuous, gradual ramp into burst and soft ease out */
+      @keyframes spinnerRotate {
+        0% { transform: rotate(0deg); }
+        20% { transform: rotate(300deg); }    /* gentle baseline */
+        40% { transform: rotate(720deg); }    /* ramping up */
+        60% { transform: rotate(1140deg); }   /* peak speed band */
+        80% { transform: rotate(1500deg); }   /* easing out */
+        100% { transform: rotate(1800deg); }  /* loop continuity (multiple of 360) */
+      }
+
+      /* Line Dash Animation: mirrors rotation phases */
+      @keyframes lineFlow {
+        0% { stroke-dashoffset: 140; }
+        20% { stroke-dashoffset: 100; }
+        40% { stroke-dashoffset: -30; }    /* ramp */
+        60% { stroke-dashoffset: -190; }   /* peak band */
+        80% { stroke-dashoffset: -300; }   /* easing out */
+        100% { stroke-dashoffset: -360; }  /* loops cleanly */
+      }
+
+      /* Single smooth inhale-exhale */
+      @keyframes spinnerBreathe {
+        0% { transform: scale(0.72); }
+        50% { transform: scale(1.04); }
+        100% { transform: scale(0.72); }
+      }
+
+      @keyframes linePulse {
+        0% { stroke-dasharray: 10 20; opacity: 0.45; }
+        35% { stroke-dasharray: 14 16; opacity: 0.7; }
+        55% { stroke-dasharray: 22 10; opacity: 0.92; } /* burst peak */
+        80% { stroke-dasharray: 18 12; opacity: 0.78; }
+        100% { stroke-dasharray: 10 20; opacity: 0.45; }
+      }
+
+      @keyframes lineFlare {
+        0% { opacity: 0.1; stroke-dasharray: 4 30; }
+        45% { opacity: 0.15; stroke-dasharray: 8 20; }
+        55% { opacity: 0.72; stroke-dasharray: 14 14; } /* flare peak during burst */
+        65% { opacity: 0.2; stroke-dasharray: 10 22; }
+        100% { opacity: 0.1; stroke-dasharray: 4 30; }
+      }
+
+      /* Slow color cycling across brand hues */
+      @keyframes hueShift {
+        0%, 10% { --line-color: #8a2be2; --node-stroke: #9370db; }
+        35% { --line-color: #7c9bff; --node-stroke: #7d8be0; }
+        65% { --line-color: #6fd0ff; --node-stroke: #78b3ff; }
+        90%, 100% { --line-color: #8a2be2; --node-stroke: #9370db; }
+      }
+
+      @keyframes flareHue {
+        0%, 10% { stroke: var(--flare-blue); }
+        35% { stroke: #7ac8ff; }
+        65% { stroke: #9ecbff; }
+        90%, 100% { stroke: var(--flare-blue); }
+      }
+
+      :root {
+        animation: hueShift 20s ease-in-out infinite;
+      }
+
+      /* Styling for the entire geometric spinner structure */
+      .spinner-shell {
+        transform-origin: 50px 50px;
+        animation: spinnerBreathe 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite;
+      }
+      .spinner-group {
+        transform-origin: 50px 50px;
+        animation: spinnerRotate 7.8s linear infinite;
+      }
+
+      /* Styling for individual hexagonal nodes */
+      .node {
+        fill: none;
+        stroke: var(--node-stroke);
+        stroke-width: 1.5;
+        opacity: 0.7;
+      }
+      .node-alt {
+        stroke: var(--flare-blue);
+      }
+
+      /* Styling for the animated data lines */
+      .data-line {
+        fill: none;
+        stroke: var(--line-color);
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 20 10; /* Creates broken lines */
+        animation:
+          lineFlow 7.8s linear infinite, /* Data routing animation */
+          linePulse 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite;
+        opacity: 0.8;
+        filter: drop-shadow(0 0 1.5px var(--line-color)); /* Subtle glow for lines */
+      }
+
+      .data-line-flare {
+        fill: none;
+        stroke: var(--flare-blue);
+        stroke-width: 1.2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0.1;
+        animation:
+          lineFlow 7.8s linear infinite,
+          lineFlare 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite,
+          flareHue 16s ease-in-out infinite;
+        filter: drop-shadow(0 0 1px var(--line-color));
+      }
+      `}
+        </style>
+
+        <g className="spinner-shell">
+          <circle cx="50" cy="50" r="60" fill="url(#bgGlow)" opacity="0.35" />
+
+          <g className="spinner-group">
+            <defs>
+              {/* Reusable hexagon path centered at (0,0) with a radius of 7 */}
+              <path
+                id="hexagonNode"
+                d="M 7 0 L 3.5 6.062 L -3.5 6.062 L -7 0 L -3.5 -6.062 L 3.5 -6.062 Z"
+              />
+            </defs>
+
+            {/* Six hexagonal nodes arranged on a circle of radius 25 around the center (50,50) */}
+            <use href="#hexagonNode" transform="translate(75, 50)" className="node-alt" />
+            <use href="#hexagonNode" transform="translate(62.5, 71.65)" className="node" />
+            <use href="#hexagonNode" transform="translate(37.5, 71.65)" className="node-alt" />
+            <use href="#hexagonNode" transform="translate(25, 50)" className="node" />
+            <use href="#hexagonNode" transform="translate(37.5, 28.35)" className="node-alt" />
+            <use href="#hexagonNode" transform="translate(62.5, 28.35)" className="node" />
+
+            {/* Connecting broken lines (AI data routing) */}
+            {/* The main outer hexagonal path connecting all nodes */}
+            <path
+              d="M 75,50 L 62.5,71.65 L 37.5,71.65 L 25,50 L 37.5,28.35 L 62.5,28.35 Z"
+              className="data-line"
+            />
+            <path
+              d="M 75,50 L 62.5,71.65 L 37.5,71.65 L 25,50 L 37.5,28.35 L 62.5,28.35 Z"
+              className="data-line-flare"
+              style={{ animationDelay: "-0.5s" }}
+            />
+
+            {/* Additional internal criss-crossing lines to suggest more complex data routing */}
+            <path d="M 75,50 L 25,50" className="data-line" style={{ animationDelay: "-1s" }} />
+            <path d="M 62.5,71.65 L 37.5,28.35" className="data-line" style={{ animationDelay: "-2.5s" }} />
+            <path d="M 37.5,71.65 L 62.5,28.35" className="data-line" style={{ animationDelay: "-4s" }} />
+            <path d="M 75,50 L 25,50" className="data-line-flare" style={{ animationDelay: "-1.4s" }} />
+            <path d="M 62.5,71.65 L 37.5,28.35" className="data-line-flare" style={{ animationDelay: "-2.9s" }} />
+            <path d="M 37.5,71.65 L 62.5,28.35" className="data-line-flare" style={{ animationDelay: "-4.4s" }} />
+          </g>
+        </g>
+      </svg>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
@@ -103,7 +258,7 @@ export default function Home() {
           <div className="flex flex-col items-center space-y-6 text-center">
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
               <span className="inline-flex" aria-hidden="true">
-                <LLMMark className="h-14 w-14 sm:h-16 sm:w-16 drop-shadow-[0_0_30px_rgba(83,216,255,0.55)]" />
+                <BrandSpinner size={110} ariaLabel="ProductPipeline brand spinner" />
               </span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight text-center">
                 {headlineLetters.map((char, index) => (
