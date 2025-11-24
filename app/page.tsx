@@ -42,7 +42,7 @@ function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: Spi
         height={size}
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
-        className="drop-shadow-[0_10px_30px_rgba(0,0,0,0.16)]"
+        className={`brand-spinner-svg drop-shadow-[0_10px_30px_rgba(0,0,0,0.16)] ${className}`}
       >
         <defs>
           {/* Filter for glow effect on the core */}
@@ -140,10 +140,12 @@ function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: Spi
       .spinner-shell {
         transform-origin: 50px 50px;
         animation: spinnerBreathe 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite;
+        will-change: transform;
       }
       .spinner-group {
         transform-origin: 50px 50px;
         animation: spinnerRotate 7.8s linear infinite;
+        will-change: transform;
       }
 
       /* Styling for individual hexagonal nodes */
@@ -170,6 +172,7 @@ function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: Spi
           linePulse 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite;
         opacity: 0.8;
         filter: drop-shadow(0 0 1.5px var(--line-color)); /* Subtle glow for lines */
+        will-change: stroke-dashoffset;
       }
 
       .data-line-flare {
@@ -184,6 +187,38 @@ function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: Spi
           lineFlare 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite,
           flareHue 16s ease-in-out infinite;
         filter: drop-shadow(0 0 1px var(--line-color));
+        will-change: stroke-dashoffset;
+      }
+
+      /* Mobile: lighten GPU load by reducing filters + easing the cadence */
+      @media (max-width: 640px) {
+        .brand-spinner-svg {
+          filter: none !important;
+        }
+        .spinner-shell {
+          animation-duration: 9s;
+        }
+        .spinner-group {
+          animation-duration: 9s;
+        }
+        .data-line,
+        .data-line-flare {
+          animation-duration: 9s;
+          filter: none;
+        }
+        .data-line-flare {
+          opacity: 0.08;
+        }
+      }
+
+      /* Respect reduced motion preferences */
+      @media (prefers-reduced-motion: reduce) {
+        .spinner-shell,
+        .spinner-group,
+        .data-line,
+        .data-line-flare {
+          animation: none !important;
+        }
       }
       `}
         </style>
