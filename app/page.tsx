@@ -29,7 +29,7 @@ type SpinnerProps = {
 };
 
 // Brand spinner used across login/upload flows. Animations and hues inline for portability.
-function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: SpinnerProps) {
+export function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: SpinnerProps) {
   return (
     <div
       role="status"
@@ -42,7 +42,7 @@ function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: Spi
         height={size}
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
-        className={`brand-spinner-svg drop-shadow-[0_10px_30px_rgba(0,0,0,0.16)] ${className}`}
+        className="drop-shadow-[0_10px_30px_rgba(0,0,0,0.16)]"
       >
         <defs>
           {/* Filter for glow effect on the core */}
@@ -65,6 +65,23 @@ function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: Spi
 
         <style>
           {`
+      /* Register color custom properties so hueShift interpolates smoothly */
+      @property --line-color {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #8a2be2;
+      }
+      @property --node-stroke {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #9370db;
+      }
+      @property --flare-blue {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #4ea5ff;
+      }
+
       :root {
         --neon-blue: #8a2be2;
         --neon-purple: #9370db;
@@ -110,11 +127,11 @@ function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: Spi
       }
 
       @keyframes lineFlare {
-        0% { opacity: 0.1; stroke-dasharray: 4 30; }
-        45% { opacity: 0.15; stroke-dasharray: 8 20; }
-        55% { opacity: 0.72; stroke-dasharray: 14 14; } /* flare peak during burst */
-        65% { opacity: 0.2; stroke-dasharray: 10 22; }
-        100% { opacity: 0.1; stroke-dasharray: 4 30; }
+        0% { opacity: 0.2; stroke-dasharray: 4 30; }
+        45% { opacity: 0.26; stroke-dasharray: 8 20; }
+        55% { opacity: 0.9; stroke-dasharray: 14 14; } /* flare peak during burst */
+        65% { opacity: 0.34; stroke-dasharray: 10 22; }
+        100% { opacity: 0.2; stroke-dasharray: 4 30; }
       }
 
       /* Slow color cycling across brand hues */
@@ -126,10 +143,13 @@ function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: Spi
       }
 
       @keyframes flareHue {
-        0%, 10% { stroke: var(--flare-blue); }
-        35% { stroke: #7ac8ff; }
-        65% { stroke: #9ecbff; }
-        90%, 100% { stroke: var(--flare-blue); }
+        0%, 12% { stroke: var(--flare-blue); }
+        22% { stroke: #8a2be2; }
+        40% { stroke: #9c5cff; }
+        58% { stroke: #b38bff; }
+        72% { stroke: #6da8ff; }
+        86% { stroke: #8fc0ff; }
+        100% { stroke: var(--flare-blue); }
       }
 
       :root {
@@ -140,12 +160,10 @@ function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: Spi
       .spinner-shell {
         transform-origin: 50px 50px;
         animation: spinnerBreathe 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite;
-        will-change: transform;
       }
       .spinner-group {
         transform-origin: 50px 50px;
         animation: spinnerRotate 7.8s linear infinite;
-        will-change: transform;
       }
 
       /* Styling for individual hexagonal nodes */
@@ -172,53 +190,20 @@ function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: Spi
           linePulse 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite;
         opacity: 0.8;
         filter: drop-shadow(0 0 1.5px var(--line-color)); /* Subtle glow for lines */
-        will-change: stroke-dashoffset;
       }
 
       .data-line-flare {
         fill: none;
         stroke: var(--flare-blue);
-        stroke-width: 1.2;
+        stroke-width: 1.35;
         stroke-linecap: round;
         stroke-linejoin: round;
-        opacity: 0.1;
+        opacity: 0.2;
         animation:
           lineFlow 7.8s linear infinite,
           lineFlare 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite,
           flareHue 16s ease-in-out infinite;
         filter: drop-shadow(0 0 1px var(--line-color));
-        will-change: stroke-dashoffset;
-      }
-
-      /* Mobile: lighten GPU load by reducing filters + easing the cadence */
-      @media (max-width: 640px) {
-        .brand-spinner-svg {
-          filter: none !important;
-        }
-        .spinner-shell {
-          animation-duration: 9s;
-        }
-        .spinner-group {
-          animation-duration: 9s;
-        }
-        .data-line,
-        .data-line-flare {
-          animation-duration: 9s;
-          filter: none;
-        }
-        .data-line-flare {
-          opacity: 0.08;
-        }
-      }
-
-      /* Respect reduced motion preferences */
-      @media (prefers-reduced-motion: reduce) {
-        .spinner-shell,
-        .spinner-group,
-        .data-line,
-        .data-line-flare {
-          animation: none !important;
-        }
       }
       `}
         </style>
