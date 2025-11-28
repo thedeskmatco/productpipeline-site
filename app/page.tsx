@@ -213,14 +213,14 @@ export default function Home() {
             </button>
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-medium text-slate-200 border border-white/15 bg-transparent hover:bg-white/5 transition"
+              className="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-medium text-slate-300 border border-white/10 bg-transparent hover:border-white/20 hover:text-slate-100 transition"
               aria-disabled="true"
             >
               Coming soon
             </button>
           </div>
 
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
             {commitments.map((item) => (
               <div key={item.title} className={panelClass}>
                 <p className="text-sm font-semibold text-slate-100">{item.title}</p>
@@ -230,7 +230,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mt-14 border-t border-white/5 bg-slate-950/40">
+        <section className="mt-18 border-t border-white/5 bg-slate-950/40">
           <div className="mx-auto grid max-w-5xl gap-6 px-6 py-8 md:grid-cols-[2fr,1fr]">
             <div className="space-y-4">
               <div className={panelClass}>
@@ -260,8 +260,8 @@ export default function Home() {
         </section>
 
         <footer className="mx-auto flex max-w-5xl flex-col gap-2 px-6 pb-12 text-sm/6 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} ProductPipeline™ — All rights reserved.</p>
-          <p>ProductPipeline™ is a trademark of Lachlan Bond.</p>
+          <p>© 2025 ProductPipeline™ — All rights reserved.</p>
+          <p>Built by Lachlan Bond.</p>
         </footer>
       </div>
     </main>
