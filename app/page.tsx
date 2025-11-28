@@ -1,15 +1,4 @@
-const positioning = [
-  {
-    label: "Positioning",
-    copy: "AI-powered ecommerce automation for modern merchants.",
-  },
-  {
-    label: "Infrastructure",
-    copy: "A next-generation infrastructure layer for managing product data and workflows.",
-  },
-];
-
-const status = [
+const signals = [
   {
     label: "Status",
     copy: "Currently in development.",
@@ -20,7 +9,23 @@ const status = [
   },
 ];
 
-const headlineLetters = "ProductPipeline".split("");
+const commitments = [
+  {
+    title: "Product data clarity",
+    copy: "Keep catalog quality high with structured, synchronized product information.",
+  },
+  {
+    title: "Workflow automation",
+    copy: "Automate the routine motions that slow down ecommerce teams.",
+  },
+  {
+    title: "Composable by design",
+    copy: "An infrastructure layer that plugs into existing product data and tooling.",
+  },
+];
+
+const panelClass =
+  "pp-tile bg-slate-900/70 border border-white/10 rounded-2xl px-6 py-5 text-slate-200 shadow-lg shadow-black/40 backdrop-blur-sm";
 
 type SpinnerProps = {
   size?: number;
@@ -28,7 +33,7 @@ type SpinnerProps = {
   ariaLabel?: string;
 };
 
-// Brand spinner used across login/upload flows. Animations and hues inline for portability.
+// Brand spinner tuned to the ProductPipeline palette.
 export function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading" }: SpinnerProps) {
   return (
     <div
@@ -42,211 +47,134 @@ export function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading"
         height={size}
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
-        className="drop-shadow-[0_10px_30px_rgba(0,0,0,0.16)]"
+        className="pp-spinner drop-shadow-[0_10px_30px_rgba(114,75,183,0.18)]"
       >
         <defs>
-          {/* Filter for glow effect on the core */}
           <filter id="coreGlow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
-            <feFlood floodColor="#a0e9ff" floodOpacity="0.9" result="color" />
+            <feFlood floodColor="#d6c6f4" floodOpacity="0.92" result="color" />
             <feComposite in="color" in2="blur" operator="in" result="glow" />
             <feMerge>
               <feMergeNode in="glow" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          {/* Subtle radial backdrop */}
           <radialGradient id="bgGlow" cx="50%" cy="50%" r="65%">
-            <stop offset="0%" stopColor="#4ea5ff" stopOpacity="0.12" />
-            <stop offset="60%" stopColor="#8a2be2" stopOpacity="0.08" />
-            <stop offset="100%" stopColor="#00091a" stopOpacity="0" />
+            <stop offset="0%" stopColor="#cfbcf2" stopOpacity="0.22" />
+            <stop offset="60%" stopColor="#c4d1e5" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#0f131c" stopOpacity="0" />
           </radialGradient>
         </defs>
-
-        <style>
-          {`
-      /* Register color custom properties so hueShift interpolates smoothly */
-      @property --line-color {
-        syntax: "<color>";
-        inherits: true;
-        initial-value: #8a2be2;
-      }
-      @property --node-stroke {
-        syntax: "<color>";
-        inherits: true;
-        initial-value: #9370db;
-      }
-      @property --flare-blue {
-        syntax: "<color>";
-        inherits: true;
-        initial-value: #4ea5ff;
-      }
-
-      :root {
-        --neon-blue: #8a2be2;
-        --neon-purple: #9370db;
-        --core-color: #a0e9ff;
-        --line-color: #8a2be2;
-        --flare-blue: #4ea5ff;
-        --node-stroke: #9370db;
-      }
-
-      /* Spinner Rotation: continuous, gradual ramp into burst and soft ease out */
-      @keyframes spinnerRotate {
-        0% { transform: rotate(0deg); }
-        20% { transform: rotate(300deg); }    /* gentle baseline */
-        40% { transform: rotate(720deg); }    /* ramping up */
-        60% { transform: rotate(1140deg); }   /* peak speed band */
-        80% { transform: rotate(1500deg); }   /* easing out */
-        100% { transform: rotate(1800deg); }  /* loop continuity (multiple of 360) */
-      }
-
-      /* Line Dash Animation: mirrors rotation phases */
-      @keyframes lineFlow {
-        0% { stroke-dashoffset: 140; }
-        20% { stroke-dashoffset: 100; }
-        40% { stroke-dashoffset: -30; }    /* ramp */
-        60% { stroke-dashoffset: -190; }   /* peak band */
-        80% { stroke-dashoffset: -300; }   /* easing out */
-        100% { stroke-dashoffset: -360; }  /* loops cleanly */
-      }
-
-      /* Single smooth inhale-exhale */
-      @keyframes spinnerBreathe {
-        0% { transform: scale(0.72); }
-        50% { transform: scale(1.04); }
-        100% { transform: scale(0.72); }
-      }
-
-      @keyframes linePulse {
-        0% { stroke-dasharray: 10 20; opacity: 0.45; }
-        35% { stroke-dasharray: 14 16; opacity: 0.7; }
-        55% { stroke-dasharray: 22 10; opacity: 0.92; } /* burst peak */
-        80% { stroke-dasharray: 18 12; opacity: 0.78; }
-        100% { stroke-dasharray: 10 20; opacity: 0.45; }
-      }
-
-      @keyframes lineFlare {
-        0% { opacity: 0.2; stroke-dasharray: 4 30; }
-        45% { opacity: 0.26; stroke-dasharray: 8 20; }
-        55% { opacity: 0.9; stroke-dasharray: 14 14; } /* flare peak during burst */
-        65% { opacity: 0.34; stroke-dasharray: 10 22; }
-        100% { opacity: 0.2; stroke-dasharray: 4 30; }
-      }
-
-      /* Slow color cycling across brand hues */
-      @keyframes hueShift {
-        0%, 10% { --line-color: #8a2be2; --node-stroke: #9370db; }
-        35% { --line-color: #7c9bff; --node-stroke: #7d8be0; }
-        65% { --line-color: #6fd0ff; --node-stroke: #78b3ff; }
-        90%, 100% { --line-color: #8a2be2; --node-stroke: #9370db; }
-      }
-
-      @keyframes flareHue {
-        0%, 12% { stroke: var(--flare-blue); }
-        22% { stroke: #8a2be2; }
-        40% { stroke: #9c5cff; }
-        58% { stroke: #b38bff; }
-        72% { stroke: #6da8ff; }
-        86% { stroke: #8fc0ff; }
-        100% { stroke: var(--flare-blue); }
-      }
-
-      :root {
-        animation: hueShift 20s ease-in-out infinite;
-      }
-
-      /* Styling for the entire geometric spinner structure */
-      .spinner-shell {
-        transform-origin: 50px 50px;
-        animation: spinnerBreathe 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite;
-      }
-      .spinner-group {
-        transform-origin: 50px 50px;
-        animation: spinnerRotate 7.8s linear infinite;
-      }
-
-      /* Styling for individual hexagonal nodes */
-      .node {
-        fill: none;
-        stroke: var(--node-stroke);
-        stroke-width: 1.5;
-        opacity: 0.7;
-      }
-      .node-alt {
-        stroke: var(--flare-blue);
-      }
-
-      /* Styling for the animated data lines */
-      .data-line {
-        fill: none;
-        stroke: var(--line-color);
-        stroke-width: 1.5;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-dasharray: 20 10; /* Creates broken lines */
-        animation:
-          lineFlow 7.8s linear infinite, /* Data routing animation */
-          linePulse 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite;
-        opacity: 0.8;
-        filter: drop-shadow(0 0 1.5px var(--line-color)); /* Subtle glow for lines */
-      }
-
-      .data-line-flare {
-        fill: none;
-        stroke: var(--flare-blue);
-        stroke-width: 1.35;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        opacity: 0.2;
-        animation:
-          lineFlow 7.8s linear infinite,
-          lineFlare 7.8s cubic-bezier(0.36, 0, 0.2, 1) infinite,
-          flareHue 16s ease-in-out infinite;
-        filter: drop-shadow(0 0 1px var(--line-color));
-      }
-      `}
-        </style>
 
         <g className="spinner-shell">
           <circle cx="50" cy="50" r="60" fill="url(#bgGlow)" opacity="0.35" />
 
           <g className="spinner-group">
             <defs>
-              {/* Reusable hexagon path centered at (0,0) with a radius of 7 */}
               <path
                 id="hexagonNode"
                 d="M 7 0 L 3.5 6.062 L -3.5 6.062 L -7 0 L -3.5 -6.062 L 3.5 -6.062 Z"
+                fill="none"
+                stroke="#c4d1e5"
+                strokeWidth="1.5"
               />
             </defs>
 
-            {/* Six hexagonal nodes arranged on a circle of radius 25 around the center (50,50) */}
-            <use href="#hexagonNode" transform="translate(75, 50)" className="node-alt" />
-            <use href="#hexagonNode" transform="translate(62.5, 71.65)" className="node" />
-            <use href="#hexagonNode" transform="translate(37.5, 71.65)" className="node-alt" />
-            <use href="#hexagonNode" transform="translate(25, 50)" className="node" />
-            <use href="#hexagonNode" transform="translate(37.5, 28.35)" className="node-alt" />
-            <use href="#hexagonNode" transform="translate(62.5, 28.35)" className="node" />
+            <use href="#hexagonNode" transform="translate(75, 50)" className="node-alt" stroke="#8662c7" />
+            <use href="#hexagonNode" transform="translate(62.5, 71.65)" className="node" stroke="#c4d1e5" />
+            <use href="#hexagonNode" transform="translate(37.5, 71.65)" className="node-alt" stroke="#8662c7" />
+            <use href="#hexagonNode" transform="translate(25, 50)" className="node" stroke="#c4d1e5" />
+            <use href="#hexagonNode" transform="translate(37.5, 28.35)" className="node-alt" stroke="#8662c7" />
+            <use href="#hexagonNode" transform="translate(62.5, 28.35)" className="node" stroke="#c4d1e5" />
 
-            {/* Connecting broken lines (AI data routing) */}
-            {/* The main outer hexagonal path connecting all nodes */}
             <path
               d="M 75,50 L 62.5,71.65 L 37.5,71.65 L 25,50 L 37.5,28.35 L 62.5,28.35 Z"
               className="data-line"
+              fill="none"
+              stroke="#724bb7"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="20 10"
             />
             <path
               d="M 75,50 L 62.5,71.65 L 37.5,71.65 L 25,50 L 37.5,28.35 L 62.5,28.35 Z"
               className="data-line-flare"
+              fill="none"
+              stroke="#8662c7"
+              strokeWidth="1.35"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="20 10"
               style={{ animationDelay: "-0.5s" }}
             />
 
-            {/* Additional internal criss-crossing lines to suggest more complex data routing */}
-            <path d="M 75,50 L 25,50" className="data-line" style={{ animationDelay: "-1s" }} />
-            <path d="M 62.5,71.65 L 37.5,28.35" className="data-line" style={{ animationDelay: "-2.5s" }} />
-            <path d="M 37.5,71.65 L 62.5,28.35" className="data-line" style={{ animationDelay: "-4s" }} />
-            <path d="M 75,50 L 25,50" className="data-line-flare" style={{ animationDelay: "-1.4s" }} />
-            <path d="M 62.5,71.65 L 37.5,28.35" className="data-line-flare" style={{ animationDelay: "-2.9s" }} />
-            <path d="M 37.5,71.65 L 62.5,28.35" className="data-line-flare" style={{ animationDelay: "-4.4s" }} />
+            <path
+              d="M 75,50 L 25,50"
+              className="data-line"
+              fill="none"
+              stroke="#724bb7"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="20 10"
+              style={{ animationDelay: "-1s" }}
+            />
+            <path
+              d="M 62.5,71.65 L 37.5,28.35"
+              className="data-line"
+              fill="none"
+              stroke="#724bb7"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="20 10"
+              style={{ animationDelay: "-2.5s" }}
+            />
+            <path
+              d="M 37.5,71.65 L 62.5,28.35"
+              className="data-line"
+              fill="none"
+              stroke="#724bb7"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="20 10"
+              style={{ animationDelay: "-4s" }}
+            />
+            <path
+              d="M 75,50 L 25,50"
+              className="data-line-flare"
+              fill="none"
+              stroke="#8662c7"
+              strokeWidth="1.35"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="20 10"
+              style={{ animationDelay: "-1.4s" }}
+            />
+            <path
+              d="M 62.5,71.65 L 37.5,28.35"
+              className="data-line-flare"
+              fill="none"
+              stroke="#8662c7"
+              strokeWidth="1.35"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="20 10"
+              style={{ animationDelay: "-2.9s" }}
+            />
+            <path
+              d="M 37.5,71.65 L 62.5,28.35"
+              className="data-line-flare"
+              fill="none"
+              stroke="#8662c7"
+              strokeWidth="1.35"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="20 10"
+              style={{ animationDelay: "-4.4s" }}
+            />
           </g>
         </g>
       </svg>
@@ -256,99 +184,84 @@ export function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading"
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-[#03060d] text-white overflow-hidden">
+    <main className="relative min-h-dvh bg-[#0f1117] text-slate-200 overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 right-10 h-72 w-72 rounded-full bg-[#41b3ff]/40 blur-[140px]" />
-        <div className="absolute -bottom-16 left-0 h-80 w-80 rounded-full bg-[#ff5b94]/30 blur-[180px]" />
-        <div className="absolute inset-y-32 inset-x-10 border border-white/5 rounded-[48px] opacity-30" />
+        <div className="absolute -top-40 left-1/3 h-80 w-80 rounded-full bg-purple-500/20 blur-3xl" />
+        <div className="absolute -bottom-[10rem] right-0 h-96 w-96 rounded-full bg-sky-500/10 blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-12 lg:py-20 flex flex-col gap-16">
-        <header className="flex flex-col gap-6">
-          <nav className="flex items-center justify-between text-[11px] tracking-[0.4em] uppercase text-white/60">
-            <span>ProductPipeline</span>
-            <span className="rounded-full border border-white/20 px-3 py-1 text-[10px] tracking-[0.3em] text-white/70">
-              Private build
-            </span>
-          </nav>
-          <div className="h-px bg-gradient-to-r from-white/0 via-white/40 to-white/0" />
-        </header>
-
-        <section className="grid gap-12 lg:grid-cols-[1.15fr,0.85fr] items-start">
-          <div className="flex flex-col items-center space-y-6 text-center">
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
-              <span className="inline-flex" aria-hidden="true">
-                <BrandSpinner size={110} ariaLabel="ProductPipeline brand spinner" />
-              </span>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight text-center">
-                {headlineLetters.map((char, index) => (
-                  <span
-                    key={`${char}-${index}`}
-                    className="falling-letter inline-block"
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                  >
-                    {char === " " ? "\u00a0" : char}
-                  </span>
-                ))}
-                <span className="align-super text-base font-light tracking-widest">™</span>
-              </h1>
-            </div>
-            <p className="text-sm uppercase tracking-[0.4em] text-white/50">
+      <div className="relative z-10">
+        <section className="mx-auto max-w-4xl px-6 pt-20 pb-12">
+          <div className="mt-6 space-y-4 text-center">
+            <h1 className="text-4xl font-semibold text-slate-100 sm:text-5xl lg:text-6xl">
+              ProductPipeline<span className="align-super text-base font-normal tracking-[0.24em]">™</span>
+            </h1>
+            <p className="text-xl/8 text-slate-200">
               AI-powered ecommerce automation for modern merchants.
             </p>
-            <p className="text-lg text-white/80 max-w-2xl mx-auto">
-              A next-generation infrastructure layer for managing product data and workflows.
+            <p className="text-base/7 text-slate-400">
+              A next-generation infrastructure layer for product data and workflows.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3 text-sm font-medium tracking-wide">
-                Currently in development.
-              </span>
-              <span className="glow-pill inline-flex items-center rounded-full bg-gradient-to-r from-[#53d8ff] to-[#7e7bff] px-6 py-3 text-sm font-semibold text-[#05070d]">
-                Coming soon.
-              </span>
-            </div>
           </div>
 
-          <aside className="w-full space-y-6">
-            <div className="rounded-[30px] border border-white/10 bg-white/5 p-6 backdrop-blur">
-              <p className="text-xs uppercase tracking-[0.4em] text-white/60">Trademark</p>
-              <p className="mt-4 text-base text-white/80">
-                ProductPipeline™ is a trademark of Lachlan Bond. Australian trademark application
-                number AMCZ-2515163029.
-              </p>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              {status.map((item) => (
-                <div
-                  key={item.label}
-                  className="rounded-[24px] border border-white/10 bg-[#0a101c]/70 p-4 text-white/80"
-                >
-                  <p className="text-[11px] uppercase tracking-[0.4em] text-white/50">{item.label}</p>
-                  <p className="mt-3 text-lg font-medium">{item.copy}</p>
-                </div>
-              ))}
-            </div>
-          </aside>
-        </section>
-
-        <section className="grid gap-6 md:grid-cols-2">
-          {positioning.map((item) => (
-            <div
-              key={item.label}
-              className="rounded-[28px] border border-white/10 bg-gradient-to-br from-white/5 via-white/0 to-white/5 p-8 backdrop-blur-sm"
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-center">
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold bg-linear-to-r from-purple-500 to-purple-400 text-slate-950 shadow-[0_0_30px_rgba(168,129,217,0.45)] hover:from-purple-400 hover:to-purple-300 transition"
             >
-              <p className="text-[11px] uppercase tracking-[0.4em] text-white/50">{item.label}</p>
-              <p className="mt-4 text-2xl font-semibold leading-snug text-white">
-                {item.copy}
-              </p>
-            </div>
-          ))}
+              Join the early access
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-medium text-slate-200 border border-white/15 bg-transparent hover:bg-white/5 transition"
+              aria-disabled="true"
+            >
+              Coming soon
+            </button>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {commitments.map((item) => (
+              <div key={item.title} className={panelClass}>
+                <p className="text-sm font-semibold text-slate-100">{item.title}</p>
+                <p className="mt-2 text-sm/6 text-slate-400">{item.copy}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
-        <footer className="flex flex-col gap-2 text-[11px] sm:text-xs text-white/50">
+        <section className="mt-14 border-t border-white/5 bg-slate-950/40">
+          <div className="mx-auto grid max-w-5xl gap-6 px-6 py-8 md:grid-cols-[2fr,1fr]">
+            <div className="space-y-4">
+              <div className={panelClass}>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Trademark</p>
+                <p className="mt-3 text-base/7 text-slate-200">
+                  ProductPipeline™ is a trademark of Lachlan Bond. Australian trademark application number AMCZ-2515163029.
+                </p>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {signals.map((item) => (
+                  <div key={item.label} className={panelClass}>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+                      {item.label}
+                    </p>
+                    <p className="mt-3 text-lg/8 font-semibold text-slate-100">{item.copy}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className={panelClass + " flex flex-col items-center justify-center gap-3 py-8"}>
+              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Visual</span>
+              <BrandSpinner size={110} ariaLabel="ProductPipeline brand spinner" />
+              <p className="text-sm text-slate-400">AI commerce infrastructure</p>
+            </div>
+          </div>
+        </section>
+
+        <footer className="mx-auto flex max-w-5xl flex-col gap-2 px-6 pb-12 text-sm/6 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} ProductPipeline™ — All rights reserved.</p>
-          <p>ProductPipeline™ is a trademark of Lachlan Bond. Australian trademark application number AMCZ-2515163029.</p>
+          <p>ProductPipeline™ is a trademark of Lachlan Bond.</p>
         </footer>
       </div>
     </main>
