@@ -27,6 +27,8 @@ const commitments = [
 const panelClass =
   "pp-tile bg-slate-900/70 border border-white/10 rounded-2xl px-6 py-5 text-slate-200 shadow-lg shadow-black/40 backdrop-blur-sm";
 
+const heroTitle = "ProductPipeline";
+
 type SpinnerProps = {
   size?: number;
   className?: string;
@@ -184,17 +186,26 @@ export function BrandSpinner({ size = 120, className = "", ariaLabel = "Loading"
 
 export default function Home() {
   return (
-    <main className="relative min-h-dvh bg-[#0f1117] text-slate-200 overflow-hidden">
+    <main className="hero-gradient relative min-h-dvh text-slate-200 overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 left-1/3 h-80 w-80 rounded-full bg-purple-500/20 blur-3xl" />
-        <div className="absolute -bottom-[10rem] right-0 h-96 w-96 rounded-full bg-sky-500/10 blur-3xl" />
+        <div className="absolute -top-36 left-[20%] h-96 w-96 rounded-full bg-purple-500/14 blur-3xl" />
+        <div className="absolute -bottom-[12rem] right-[4%] h-[26rem] w-[26rem] rounded-full bg-sky-500/12 blur-3xl" />
       </div>
 
       <div className="relative z-10">
         <section className="mx-auto max-w-4xl px-6 pt-20 pb-12">
           <div className="mt-6 space-y-4 text-center">
-            <h1 className="text-4xl font-semibold text-slate-100 sm:text-5xl lg:text-6xl">
-              ProductPipeline<span className="align-super text-base font-normal tracking-[0.24em]">™</span>
+            <h1 className="hero-title text-4xl font-semibold text-slate-100 sm:text-5xl lg:text-6xl">
+              {heroTitle.split("").map((char, index) => (
+                <span
+                  key={`${char}-${index}`}
+                  className="falling-letter"
+                  style={{ animationDelay: `${index * 0.06}s` }}
+                >
+                  {char === " " ? "\u00A0" : char}
+                </span>
+              ))}
+              <span className="align-super text-base font-normal tracking-[0.24em]">™</span>
             </h1>
             <p className="text-xl/8 text-slate-200">
               AI-powered ecommerce automation for modern merchants.
@@ -207,9 +218,9 @@ export default function Home() {
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-center">
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold bg-linear-to-r from-purple-500 to-purple-400 text-slate-950 shadow-[0_0_30px_rgba(168,129,217,0.45)] hover:from-purple-400 hover:to-purple-300 transition"
+              className="cta-wave inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold text-slate-950 transition"
             >
-              Join the early access
+              <span>Join the early access</span>
             </button>
             <button
               type="button"
@@ -231,30 +242,34 @@ export default function Home() {
         </section>
 
         <section className="mt-18 border-t border-white/5 bg-slate-950/40">
-          <div className="mx-auto grid max-w-5xl gap-6 px-6 py-8 md:grid-cols-[2fr,1fr]">
-            <div className="space-y-4">
-              <div className={panelClass}>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Trademark</p>
-                <p className="mt-3 text-base/7 text-slate-200">
-                  ProductPipeline™ is a trademark of Lachlan Bond. Australian trademark application number AMCZ-2515163029.
-                </p>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {signals.map((item) => (
-                  <div key={item.label} className={panelClass}>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
-                      {item.label}
-                    </p>
-                    <p className="mt-3 text-lg/8 font-semibold text-slate-100">{item.copy}</p>
-                  </div>
-                ))}
-              </div>
+          <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
+            <div className={panelClass}>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Trademark</p>
+              <p className="mt-3 text-base/7 text-slate-200">
+                ProductPipeline™ is a trademark of Lachlan Bond. Australian trademark application number AMCZ-2515163029.
+              </p>
             </div>
 
-            <div className={panelClass + " flex flex-col items-center justify-center gap-3 py-8"}>
-              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Visual</span>
-              <BrandSpinner size={110} ariaLabel="ProductPipeline brand spinner" />
-              <p className="text-sm text-slate-400">AI commerce infrastructure</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {signals.map((item) => (
+                <div key={item.label} className={panelClass}>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+                    {item.label}
+                  </p>
+                  {item.label === "Status" ? (
+                    <div className="mt-2 flex items-center gap-3">
+                      <BrandSpinner
+                        size={56}
+                        className="status-spinner"
+                        ariaLabel="ProductPipeline status loading"
+                      />
+                      <p className="status-pulse text-lg/8 font-semibold text-slate-100">{item.copy}</p>
+                    </div>
+                  ) : (
+                    <p className="mt-3 text-lg/8 font-semibold text-slate-100">{item.copy}</p>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </section>
