@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Overpass:wght@800&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -51,8 +52,10 @@ body {
 }
 
 .hero-title {
-  font-family: "Proxima Nova", "Proxima Nova Semibold", "ProximaNova-Semibold", "Space Grotesk", "Inter", "Helvetica Neue", Arial, sans-serif;
-  font-weight: 600;
+  font-family: "Overpass", "Proxima Nova", "Proxima Nova Semibold", "ProximaNova-Semibold", "Space Grotesk", "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  font-optical-sizing: auto;
   letter-spacing: 0.012em;
 }
 
